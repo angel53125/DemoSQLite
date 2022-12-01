@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Globo Med</string>
     <string name="action_delete">Delete</string>
-    <string name="name">Full Name</string>
+    <string name="name">Full Names</string>
     <string name="designation">Designation</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>

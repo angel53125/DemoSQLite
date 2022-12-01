@@ -32,11 +32,12 @@ public class UpdateEmployeeDialog  extends DialogFragment
     private Button btnCancel;
     private DBHelper dbHelper;
     private Employee employeeToShow;
+    private EmployeeListAdapter empListAdapter;
 
-
-    public UpdateEmployeeDialog(Employee employee)
+    public UpdateEmployeeDialog(Employee employee,EmployeeListAdapter emp)
     {
         this.employeeToShow = employee;
+        empListAdapter = emp;
     }
 
     @Override
@@ -73,7 +74,7 @@ public class UpdateEmployeeDialog  extends DialogFragment
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                updateEmployeeInfo();
                 dismiss();
 
             }
@@ -109,6 +110,8 @@ public class UpdateEmployeeDialog  extends DialogFragment
             }
         });
 
+        dbHelper = new DBHelper(getContext());
+
         builder.setView(dialogView).setMessage("Update Employee");
         return builder.create();
     }
@@ -119,6 +122,7 @@ public class UpdateEmployeeDialog  extends DialogFragment
         String toastString = null;
         String name = etvName.getText().toString();
         String desig = etvDesignation.getText().toString();
+
         long calInMS = myCalendar.getTimeInMillis();
 
         boolean isValid = (!name.equals("") && !desig.equals(""));
@@ -129,6 +133,20 @@ public class UpdateEmployeeDialog  extends DialogFragment
         }
         else  //Update info for employee
         {
+
+            System.out.println("Working");
+            employeeToShow.setName(name);
+            employeeToShow.setDesignation(desig);
+            dbHelper.updateEmployee(employeeToShow);
+
+            System.out.println("look" + employeeToShow.getDesignation());
+            //refresh
+            ArrayList<Employee> allEmps = dbHelper.fetchAllEmployees();
+
+            empListAdapter.setEmployees(allEmps);
+            empListAdapter.notifyDataSetChanged();
+            empListAdapter.notifyItemRangeChanged(0,allEmps.size());
+
             toastString = "Employee updated.";
 
         }
